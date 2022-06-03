@@ -1,0 +1,21 @@
+<RCC>
+  <qresource prefix="img">
+    <file>icon/picture.png</file>
+    <file>icon/finish.png</file>
+    <file>icon/pause.png</file>
+    <file>icon/info.png</file>
+    <file>icon/play.png</file>
+    <file>icon/button-off.png</file>
+    <file>icon/button-on.png</file>
+    <file>icon/bottom.png</file>
+    <file>icon/arrow-down.png</file>
+    <file>icon/arrow-up.png</file>
+    <file>icon/file.png</file>
+    <file>icon/close.png</file>
+    <file>icon/dot.png</file>
+    <file>icon/max.png</file>
+    <file>icon/min.png</file>
+    <file>icon/setting.png</file>
+    <file>icon/trash.png</file>
+  </qresource>
+</RCC>
