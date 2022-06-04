@@ -462,8 +462,7 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                             curr_dic=curr_dic+statistic_dic[num]
                             statistic_dic[num]=curr_dic
                             # print("statistic_dic:",statistic_dic)
-                            num=-1 #重置index
-                            break
+                            # break
                 results = [str(i[0]) + '-'+str(i[1]) + '：' + str(i[2]) for i in statistic_dic]
             else:
                 results = [str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
