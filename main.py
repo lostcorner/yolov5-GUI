@@ -439,39 +439,34 @@ class MainWindow(QMainWindow, Ui_mainWindow):
             self.resultWidget.clear()
             statistic_dic = sorted(statistic_dic.items(), key=lambda x: x[1], reverse=True)
             statistic_dic = [i for i in statistic_dic if i[1] > 0]
-            # if self.det_thread.weights == 'best.pt':
-            #     cls={"可回收物": {"充电宝","包","洗护用品","塑料玩具","塑料器皿","塑料衣架","玻璃器皿","金属器皿","快递纸袋",
-            #                             "插头电线","旧衣服","易拉罐","枕头","毛绒玩具","鞋","砧板","纸盒纸箱","调料瓶","酒瓶","金属食品罐",
-            #                             "金属厨具","锅","食用油桶","饮料瓶","书籍纸张","垃圾桶","塑料厨具","毛巾","纸袋","饮料盒"},
-            #                 "厨余垃圾": {"剩饭剩菜","大骨头","果皮果肉","茶叶渣","菜帮菜叶","蛋壳","鱼骨"},
-            #                 "有害垃圾": {"干电池","软膏","过期药物"},
-            #                 "其他垃圾": {"一次性快餐盒","污损塑料","烟蒂","牙签","花盆","陶瓷器皿","筷子","污损用纸"}}
-            #     results = [' '+str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
-            #     curr_results = [str(i[0]) for i in statistic_dic]
-            #     for key, val in cls.items():
-            #         for trash in curr_results:
-            #             if trash in cls[key]:
-            #                 results = [key + '-'+str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
-            #                 print(key)
-            #                 break
-            # else:
-            #     results = [' '+str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
-            cls={"可回收物": {"充电宝","包","洗护用品","塑料玩具","塑料器皿","塑料衣架","玻璃器皿","金属器皿","快递纸袋",
-                                        "插头电线","旧衣服","易拉罐","枕头","毛绒玩具","鞋","砧板","纸盒纸箱","调料瓶","酒瓶","金属食品罐",
-                                        "金属厨具","锅","食用油桶","饮料瓶","书籍纸张","垃圾桶","塑料厨具","毛巾","纸袋","饮料盒"},
-                            "厨余垃圾": {"剩饭剩菜","大骨头","果皮果肉","茶叶渣","菜帮菜叶","蛋壳","鱼骨"},
-                            "有害垃圾": {"干电池","软膏","过期药物"},
-                            "其他垃圾": {"一次性快餐盒","污损塑料","烟蒂","牙签","花盆","陶瓷器皿","筷子","污损用纸"}}
-            results = [' '+str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
-            curr_results = [str(i[0]) for i in statistic_dic]
-            for key, val in cls.items():
-                for trash in curr_results:
-                    if trash in cls[key]:
-                        results = [key + '\t'+str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
-                        print(key)
-                        break
-            # print(statistic_dic)
-            # print(results)
+            # 此处判断是否是垃圾检测来选择results
+            if self.det_thread.weights == './pt/best.pt':
+                cls={"可回收物": {"充电宝","包","洗护用品","塑料玩具","塑料器皿","塑料衣架","玻璃器皿","金属器皿","快递纸袋",
+                                            "插头电线","旧衣服","易拉罐","枕头","毛绒玩具","鞋","砧板","纸盒纸箱","调料瓶","酒瓶","金属食品罐",
+                                            "金属厨具","锅","食用油桶","饮料瓶","书籍纸张","垃圾桶","塑料厨具","毛巾","纸袋","饮料盒"},
+                                "厨余垃圾": {"剩饭剩菜","大骨头","果皮果肉","茶叶渣","菜帮菜叶","蛋壳","鱼骨"},
+                                "有害垃圾": {"干电池","软膏","过期药物"},
+                                "其他垃圾": {"一次性快餐盒","污损塑料","烟蒂","牙签","花盆","陶瓷器皿","筷子","污损用纸"}}
+                results = [' '+str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
+                curr_results = [str(i[0]) for i in statistic_dic] # 得到检测到的类别
+                sum=len(statistic_dic) # 类别数量
+                num=-1 # 遍历index
+                for key, val in cls.items(): 
+                    for trash in curr_results:
+                        if num==sum-1: # 在results中的类别按顺序进行查询，index上限为类别数量
+                            num=0
+                        else:
+                            num=num+1
+                        if trash in cls[key]: #查询
+                            curr_dic=(key,)
+                            curr_dic=curr_dic+statistic_dic[num]
+                            statistic_dic[num]=curr_dic
+                            # print("statistic_dic:",statistic_dic)
+                            num=-1 #重置index
+                            break
+                results = [str(i[0]) + '-'+str(i[1]) + '：' + str(i[2]) for i in statistic_dic]
+            else:
+                results = [str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
             self.resultWidget.addItems(results)
 
         except Exception as e:
